@@ -28,3 +28,6 @@ Precisaremos de aktussuna performance na comunicacao entre o sistema de checkout
 
 Solucao: trabalharemos com o gRPC, um framework criado pela google que permite. realizarmos as transacacoes de forma rapida e transitando o payloard em binario usando o protocolo http2
 
+Ordem recomendada de execução
+Apache Kafka
+Codebank (Golang)
