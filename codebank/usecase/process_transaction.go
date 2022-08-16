@@ -1,13 +1,18 @@
 package usecase
 
 import (
+	"encoding/json"
+	"os"
+	"time"
+
 	"github.com/codeedu/codebank/domain"
 	"github.com/codeedu/codebank/dto"
-	"time"
+	"github.com/codeedu/codebank/infrastructure/kafka"
 )
 
 type UseCaseTransaction struct {
 	TransactionRepository domain.TransactionRepository
+	KafkaProducer         kafka.KafkaProducer
 }
 
 func NewUseCaseTransaction(transactionRepository domain.TransactionRepository) UseCaseTransaction {
@@ -17,22 +22,28 @@ func NewUseCaseTransaction(transactionRepository domain.TransactionRepository) U
 func (u UseCaseTransaction) ProcessTransaction(transactionDto dto.Transaction) (domain.Transaction, error) {
 	creditCard := u.hydrateCreditCard(transactionDto)
 	ccBalanceAndLimit, err := u.TransactionRepository.GetCreditCard(*creditCard)
-	
 	if err != nil {
 		return domain.Transaction{}, err
 	}
-	
 	creditCard.ID = ccBalanceAndLimit.ID
 	creditCard.Limit = ccBalanceAndLimit.Limit
 	creditCard.Balance = ccBalanceAndLimit.Balance
 	t := u.newTransaction(transactionDto, ccBalanceAndLimit)
 	t.ProcessAndValidate(creditCard)
 	err = u.TransactionRepository.SaveTransaction(*t, *creditCard)
-	
 	if err != nil {
 		return domain.Transaction{}, err
 	}
-	
+	transactionDto.ID = t.ID
+	transactionDto.CreatedAt = t.CreatedAt
+	transactionJson, err := json.Marshal(transactionDto)
+	if err != nil {
+		return domain.Transaction{}, err
+	}
+	err = u.KafkaProducer.Publish(string(transactionJson), os.Getenv("KafkaTransactionsTopic"))
+	if err != nil {
+		return domain.Transaction{}, err
+	}
 	return *t, nil
 }
 
