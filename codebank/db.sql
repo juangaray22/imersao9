@@ -2,6 +2,8 @@ CREATE TABLE credit_cards (
     id uuid NOT NULL,
     name VARCHAR NOT NULL,
     number VARCHAR NOT NULL,
+    country VARCHAR NOT NULL,
+    currency VARCHAR NOT NULL,
     expiration_month VARCHAR NOT NULL,
     expiration_year VARCHAR,
 	CVV VARCHAR NOT NULL,

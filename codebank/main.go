@@ -16,8 +16,10 @@ func main() {
 
 	cc := domain.NewCreditCard()
 	cc.Number = "1234"
-	cc.Name = "Wesley"
-	cc.ExpirationYear = 2021
+	cc.Name = "Juan Garay"
+	cc.Country = "Portugal"
+	cc.Currency = "EURO"
+	cc.ExpirationYear = 2029
 	cc.ExpirationMonth = 7
 	cc.CVV = 123
 	cc.Limit = 1000

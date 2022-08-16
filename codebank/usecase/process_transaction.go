@@ -36,6 +36,8 @@ func (u UseCaseTransaction) hydrateCreditCard(transactionDto dto.Transaction) *d
 	creditCard := domain.NewCreditCard()
 	creditCard.Name = transactionDto.Name
 	creditCard.Number = transactionDto.Number
+	creditCard.Country = transactionDto.Country
+	creditCard.Currency = transactionDto.Currency
 	creditCard.ExpirationMonth = transactionDto.ExpirationMonth
 	creditCard.ExpirationYear = transactionDto.ExpirationYear
 	creditCard.CVV = transactionDto.CVV
