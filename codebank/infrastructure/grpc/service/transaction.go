@@ -24,8 +24,8 @@ func (t *TransactionService) Payment(ctx context.Context, in *pb.PaymentRequest)
 	transactionDto := dto.Transaction{
 		Name:            in.GetCreditCard().GetName(),
 		Number:          in.CreditCard.GetNumber(),
-		Country:         in.CreditCard.GetNumber(),
-		Currency:        in.CreditCard.GetNumber(),
+		Country:         in.CreditCard.GetCountry(),
+		Currency:        in.CreditCard.GetCurrency(),
 		ExpirationMonth: in.GetCreditCard().GetExpirationMonth(),
 		ExpirationYear:  in.GetCreditCard().GetExpirationYear(),
 		CVV:             in.GetCreditCard().GetCvv(),
